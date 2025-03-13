@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원가입</title>
+</head>
+<body>
+<h1 style="text-align: center; font-size: 36px;">회원가입</h1>
+
+<div th:if="${error}" style="color: red; text-align: center; font-size: 20px;">
+  <p th:text="${error}"></p>
+</div>
+
+<form action="/user/signup" method="post" style="width: 50%; margin: 0 auto;">
+  <div style="margin-bottom: 15px;">
+    <input type="text" name="username" placeholder="아이디" required style="width: 100%; padding: 15px; font-size: 20px;">
+  </div>
+  <div style="margin-bottom: 15px;">
+    <input type="password" name="password" placeholder="비밀번호" required style="width: 100%; padding: 15px; font-size: 20px;">
+  </div>
+  <div style="margin-bottom: 15px;">
+    <input type="password" name="passwordoky" placeholder="비밀번호 확인" required style="width: 100%; padding: 15px; font-size: 20px;">
+  </div>
+  <div style="margin-bottom: 15px;">
+    <input type="text" name="name" placeholder="이름" required style="width: 100%; padding: 15px; font-size: 20px;">
+  </div>
+  <button type="submit" style="width: 100%; padding: 15px; font-size: 20px; background-color: #008CBA; color: white; border: none; cursor: pointer;">회원가입</button>
+</form>
+
+<a href="/user/login" style="display: block; text-align: center; font-size: 20px; margin-top: 20px;">로그인하기</a>
+</body>
+</html>

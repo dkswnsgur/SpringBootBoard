@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class UserController {
 
@@ -19,6 +21,15 @@ public class UserController {
     public String Login() {
         return "user/login";
     }
+    @PostMapping("/user/login")
+    public String LoginSuceess(@RequestParam String username, @RequestParam String password, Model model, HttpSession session) {
+        if (!userService.loginCheck(username, password)) {
+            model.addAttribute("error", "아이디나 비밀번호가 틀립니다.");
+            return "user/login";
+        }
+        session.setAttribute("loggedInUser", username);
+        return "redirect:/board/boardread";
+    }
 
     @GetMapping("/user/signup") //会員登録画面 url
     public String signup() {
@@ -26,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping("/user/signup") //会員登録機能 url
-    public String signup(@RequestParam String username, @RequestParam String password, @RequestParam String passwordoky, @RequestParam String name, Model model) {
+    public String signupScusess(@RequestParam String username, @RequestParam String password, @RequestParam String passwordoky, @RequestParam String name, Model model) {
         UserDTO user = new UserDTO(username, password, passwordoky, name);
         if (!userService.signCheck(username)) { //ID重複チェック
             model.addAttribute("error", "아이디가 이미 존재합니다.");
@@ -38,9 +49,12 @@ public class UserController {
             return "/user/signup";
         }
         userService.signupUser(user); //加入成功
-        return "/board/boardread";
+        return "/user/login";
     }
 
-
-
+    @PostMapping("/user/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "user/login";
+    }
 }

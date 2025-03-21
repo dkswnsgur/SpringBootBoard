@@ -1,11 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-성공
+    <h2>전체 게시글 보기</h2>
+    <div  th:if="${loggedInUser}">
+        <p>안녕하세요, <span th:text="${loggedInUser}"></span>님!</p>
+        <form th:action="@{/user/logout}" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
+    <div style="display: flex; justify-content: center; margin-top: 20px;">
+    <table width="800" border="1">
 
+        <tr height = "40">
+            <td colspan="5" align="right">
+                <button onclick="location.href ='BoardWriteForm'">글쓰기</button>
+            </td>
+        </tr>
+
+        <tr height = "70">
+            <td width = "100" align ="center">번호 </td>
+            <td width = "420" align ="center">제목</td>
+            <td width = "200" align ="center">작성자 </td>
+            <td width = "250" align ="center">작성일 </td>
+        </tr>
+
+        <tr th:each="board : ${boardList}">
+            <td th:text="${board.id}"></td>
+            <td th:text="${board.title}"></td>
+            <td th:text="${board.author}"></td>
+            <td th:text="${#dates.format(board.created_at, 'yyyy-MM-dd HH:mm')}"></td>
+        </tr>
+    </table>
+    </div>
+    </p>
 </body>
 </html>

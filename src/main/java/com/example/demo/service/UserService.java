@@ -19,6 +19,18 @@ public class UserService {
         userMapper.insertUser(user);
     }
 
+    public boolean loginCheck(String username, String password) {
+        int userCount = userMapper.checkUsernameExist(username);
+        if (userCount == 0) {
+            return false;
+        }
+        String encodedPassword = userMapper.checkpasswordExist(username);
+        if (encodedPassword == null) {
+            return false;
+        }
+        return passwordEncoder.matches(password, encodedPassword);
+    }
+
     public boolean signCheck(String username) { //ID重複チェック機能
         int userCount = userMapper.checkUsernameExist(username);
         return userCount == 0;

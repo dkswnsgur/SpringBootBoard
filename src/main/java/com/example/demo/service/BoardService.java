@@ -20,4 +20,17 @@ public class BoardService {
     public List<BoardDTO> getAllBoards() {
         return boardMapper.getAllBoards();
     }
+
+    public BoardDTO getBoardById(Long id) {
+        return boardMapper.getBoardById(id);
+    }
+
+    public boolean deleteBoardById(Long id) {
+        int delete = boardMapper.deleteBoardById(id);
+        return delete > 0;
+    }
+    public boolean updateBoard(BoardDTO boardDTO) {
+        int result = boardMapper.updateBoard(boardDTO);
+        return result > 0;
+    }
 }

@@ -30,7 +30,7 @@
 
         <tr th:each="board : ${boardList}">
             <td th:text="${board.id}"></td>
-            <td th:text="${board.title}"></td>
+            <td><a th:href="@{/board/writeFormread/{id}(id=${board.id})}" th:text="${board.title}"></a></td>
             <td th:text="${board.author}"></td>
             <td th:text="${#dates.format(board.created_at, 'yyyy-MM-dd HH:mm')}"></td>
         </tr>

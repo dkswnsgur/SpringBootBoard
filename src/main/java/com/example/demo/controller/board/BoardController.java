@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -23,7 +24,7 @@ public class BoardController {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             model.addAttribute("error", "회원가입을 해주세요.");
-            return "redirect:/user/signup";
+            return "redirect:/";
         }
         model.addAttribute("loggedInUser", loggedInUser);
 
@@ -43,11 +44,37 @@ public class BoardController {
         String author = (String) session.getAttribute("loggedInUser");
         BoardDTO board = new BoardDTO(title, content, author);
         boardService.insertBoard(board);
-        return "board/boardread";
+        return "redirect:/board/boardread";
     }
 
+    @GetMapping("/board/writeFormread/{id}")
+    public String writeFormread(@PathVariable Long id, Model model) {
+        BoardDTO boardDTO = boardService.getBoardById(id);
+        model.addAttribute("board", boardDTO);
 
+        return "board/writeFormread";
+    }
 
+    @GetMapping("/board/boarddelete/{id}")
+    public String boardDelete(@PathVariable Long id) {
+        boolean delete = boardService.deleteBoardById(id);
+        if (delete) {
+            return "redirect:/board/boardread";
+        } else {
+            return "오류 입니다";
+        }
+    }
 
+    @PostMapping("/board/boardupdate")
+    public String boardUpdate(BoardDTO boardDTO) {
+        boolean update = boardService.updateBoard(boardDTO);
+        if (update) {
+            return "redirect:/board/boardread";
+        } else {
+            return "수정 오류";
+        }
+    }
 }
+
+
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>게시글 작성</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<h2>게시글 보기</h2>
+<form action="/board/boardupdate" method="post" id="updateForm">
+  <input type="hidden" name="id" th:value="${board.id}">
+  <label for="title">제목:</label>
+  <input type="text" id="title" name="title" th:value="${board.title}">
+
+  <hr>
+
+  <label for="content">내용:</label>
+  <textarea id="content" name="content" th:text="${board.content}"></textarea>
+  <!--<button type="button" class="update-button" th:data-id="${board.id}" th:data-title="${board.title}" th:data-content="${board.content}" onclick="confirmUpdate1(this)">수정하기</button>-->
+  <button type="button" class="update-button" onclick="confirmUpdate()">수정하기</button>
+  <button type="button" class="delete-button" th:data-id="${board.id}" onclick="confirmDelete(this)">삭제하기</button>
+  <button type="button" class="cancel-button" onclick="location.href='/board/boardread'">취소</button>
+</form>
+<script src="/js/board.js"></script>
+</body>
+</html>

@@ -19,20 +19,37 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    @GetMapping("board/boardread")
-    public String boardRead(HttpSession session, Model model) {
+    @GetMapping("/board/boardread")
+    public String boardRead(@RequestParam(value = "page", required = false) Integer currentPage, Model model, HttpSession session) {
         String loggedInUser = (String) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
-            model.addAttribute("error", "회원가입을 해주세요.");
+            session.setAttribute("errorMessage", "회원가입을 해주세요.");
             return "redirect:/";
         }
         model.addAttribute("loggedInUser", loggedInUser);
 
-        List<BoardDTO> boardList = boardService.getAllBoards();
+        int pageSize = 10;
+        int totalBoardCount = boardService.getTotalBoardCount();
+        int totalPages = (int) Math.ceil((double) totalBoardCount / pageSize);
+
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        List<BoardDTO> boardList = boardService.getBoardsByPage(currentPage, pageSize);
+        List<Integer> pageNumbers = boardService.getPageNumbers(totalPages);
+
         model.addAttribute("boardList", boardList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", pageNumbers);
 
         return "board/boardread";
     }
+
 
     @GetMapping("/board/BoardWriteForm")
     public String boardWriteForm() {
@@ -61,7 +78,7 @@ public class BoardController {
         if (delete) {
             return "redirect:/board/boardread";
         } else {
-            return "오류 입니다";
+            return "삭제 오류 입니다";
         }
     }
 
@@ -74,7 +91,35 @@ public class BoardController {
             return "수정 오류";
         }
     }
+
+    @GetMapping("/board/search")
+    public String searchBoard(@RequestParam("keyword") String keyword,
+                              @RequestParam(value = "page", required = false, defaultValue = "1") int currentPage,
+                              HttpSession session, Model model) {
+
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            model.addAttribute("error", "회원가입을 해주세요.");
+            return "redirect:/";
+        }
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        int pageSize = 10;
+        int totalSearchCount = boardService.getTotalSearchCount(keyword);
+        int totalPages = (int) Math.ceil((double) totalSearchCount / pageSize);
+
+        if (currentPage < 1) currentPage = 1;
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        List<BoardDTO> searchResults = boardService.searchBoardsByPage(keyword, currentPage, pageSize);
+        List<Integer> pageNumbers = boardService.getPageNumbers(totalPages);
+
+        model.addAttribute("boardList", searchResults);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("keyword", keyword);
+
+        return "board/boardread";
+    }
 }
-
-
-

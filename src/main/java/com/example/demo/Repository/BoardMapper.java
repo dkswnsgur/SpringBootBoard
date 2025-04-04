@@ -22,4 +22,19 @@ public interface BoardMapper {
 
     @Update("UPDATE posts SET title = #{title}, content = #{content} WHERE id = #{id}")
     int updateBoard(BoardDTO boardDTO);
+
+    @Select("SELECT * FROM posts WHERE title LIKE CONCAT('%', #{keyword}, '%') ORDER BY created_at DESC")
+    List<BoardDTO> searchBoards(String keyword);
+
+    @Select("SELECT COUNT(*) FROM posts")
+    int countBoards();
+
+    @Select("SELECT * FROM posts ORDER BY created_at DESC LIMIT #{size} OFFSET #{offset}")
+    List<BoardDTO> getBoardList(@Param("size") int size, @Param("offset") int offset);
+
+    @Select("SELECT COUNT(*) FROM posts WHERE title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%')")
+    int getTotalSearchCount(@Param("keyword") String keyword);
+
+    @Select("SELECT * FROM posts WHERE title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') ORDER BY created_at DESC LIMIT #{size} OFFSET #{offset}")
+    List<BoardDTO> searchBoardsByPage(@Param("keyword") String keyword, @Param("size") int size, @Param("offset") int offset);
 }

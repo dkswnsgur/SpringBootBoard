@@ -1,6 +1,8 @@
 package com.example.demo.controller.board;
 
 import com.example.demo.dto.board.BoardDTO;
+import com.example.demo.dto.user.UserDTO;
+import com.example.demo.dto.user.UserDTO1;
 import com.example.demo.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -121,5 +123,21 @@ public class BoardController {
         model.addAttribute("keyword", keyword);
 
         return "board/boardread";
+    }
+
+    @GetMapping("/board/UserList")
+    public String UserList(HttpSession session, Model model) {
+
+        String loggedInUser = (String) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            session.setAttribute("errorMessage", "회원가입을 해주세요.");
+            return "redirect:/";
+        }
+        model.addAttribute("loggedInUser", loggedInUser);
+
+        List<UserDTO1> UserList = boardService.getAllUsers();
+        model.addAttribute("userList", UserList);
+
+        return "board/UserList";
     }
 }

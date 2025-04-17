@@ -1,8 +1,9 @@
 package com.example.demo.dto.user;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-public class UserDTO {
+public class UserDTO1 {
 
     private String id;
     @NotEmpty(message = "아이디를 입력하세요.")
@@ -19,13 +20,15 @@ public class UserDTO {
 
     private String created_at;
 
-    public UserDTO() {}
+    public UserDTO1() {}
 
-    public UserDTO(String username, String password, String passwordoky, String name) {
+    public UserDTO1(String id, String username, String password, String passwordoky, String name, String created_at) {
+        this.id = id;
         this.username = username;
         this.password = password;
         this.passwordoky = passwordoky;
         this.name = name;
+        this.created_at = created_at;
     }
 
 

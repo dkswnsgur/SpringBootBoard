@@ -9,9 +9,14 @@
 
 <div th:if="${loggedInUser}">
     <p>안녕하세요, <span th:text="${loggedInUser}"></span>님!</p>
-    <form th:action="@{/user/logout}" method="post">
-        <button type="submit">로그아웃</button>
-    </form>
+
+    <div style="display: flex; gap: 10px;">
+        <form th:action="@{/user/logout}" method="post" style="margin: 0;">
+            <button type="submit">로그아웃</button>
+        </form>
+
+        <button onclick="location.href='UserList'">회원 관리</button>
+    </div>
 </div>
 
 <div style="display: flex; justify-content: center; margin-top: 20px;">

@@ -1,7 +1,10 @@
 package com.example.demo.service;
 
 import com.example.demo.Repository.BoardMapper;
+import com.example.demo.Repository.UserMapper;
 import com.example.demo.dto.board.BoardDTO;
+import com.example.demo.dto.user.UserDTO;
+import com.example.demo.dto.user.UserDTO1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,10 @@ public class BoardService {
 
     @Autowired
     private BoardMapper boardMapper;
+
+    @Autowired
+    private UserMapper userMapper;
+
 
     public void insertBoard(BoardDTO board) {
         boardMapper.insertBoard(board);
@@ -65,6 +72,8 @@ public class BoardService {
         return boardMapper.searchBoardsByPage(keyword, size, offset);
     }
 
-
+    public List<UserDTO1> getAllUsers() {
+        return userMapper.getAllUsers();
+    }
 
 }

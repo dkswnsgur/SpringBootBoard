@@ -37,4 +37,6 @@ public interface BoardMapper {
 
     @Select("SELECT * FROM posts WHERE title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%') ORDER BY created_at DESC LIMIT #{size} OFFSET #{offset}")
     List<BoardDTO> searchBoardsByPage(@Param("keyword") String keyword, @Param("size") int size, @Param("offset") int offset);
+
+
 }

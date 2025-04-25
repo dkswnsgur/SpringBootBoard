@@ -37,6 +37,12 @@ public class BoardService {
         int delete = boardMapper.deleteBoardById(id);
         return delete > 0;
     }
+
+    public boolean deleteUsersById(Long id) {
+        int delete = userMapper.deleteUsersById(id);
+        return delete > 0;
+    }
+
     public boolean updateBoard(BoardDTO boardDTO) {
         int result = boardMapper.updateBoard(boardDTO);
         return result > 0;
@@ -48,6 +54,10 @@ public class BoardService {
 
     public int getTotalBoardCount() {
         return boardMapper.countBoards();
+    }
+
+    public int getTotalUsersCount() {
+        return userMapper.countUsers();
     }
 
     public int getTotalSearchCount(String keyword) {
@@ -75,5 +85,25 @@ public class BoardService {
     public List<UserDTO1> getAllUsers() {
         return userMapper.getAllUsers();
     }
+
+    public List<UserDTO1> getUsersByPage(int page, int size) {
+        if (page < 1) page = 1;
+        int offset = (page - 1) * size;
+        return userMapper.getUsersList(size, Math.max(0, offset));
+    }
+
+    public List<Integer> getUsersNumbers(int totalPages) {
+        List<Integer> pageNumbers = new ArrayList<>();
+        for (int i = 1; i <= totalPages; i++) {
+            pageNumbers.add(i);
+        }
+        return pageNumbers;
+    }
+
+
+
+
+
+
 
 }

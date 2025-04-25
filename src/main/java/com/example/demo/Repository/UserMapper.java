@@ -3,9 +3,7 @@ package com.example.demo.Repository;
 import com.example.demo.dto.board.BoardDTO;
 import com.example.demo.dto.user.UserDTO;
 import com.example.demo.dto.user.UserDTO1;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -23,4 +21,14 @@ public interface UserMapper {
 
     @Select("SELECT * FROM users ORDER BY created_at DESC")
     List<UserDTO1> getAllUsers();
+
+    @Select("SELECT COUNT(*) FROM users")
+    int countUsers();
+
+    @Select("SELECT * FROM users ORDER BY created_at DESC LIMIT #{size} OFFSET #{offset}")
+    List<UserDTO1> getUsersList(@Param("size") int size, @Param("offset") int offset);
+
+    @Delete("DELETE FROM users WHERE id = #{id}")
+    int deleteUsersById(Long id);
+
 }

@@ -23,8 +23,21 @@
         <td th:text="${user.password}"></td>
         <td th:text="${user.name}"></td>
         <td th:text="${user.created_at}"></td>
-        <td> <a href="/userDelete?id=${user.id}" onclick="return confirm('정말 삭제할까요?')">삭제</a></td>
+        <td> <a th:href="@{/board/UserDelete/{id}(id=${user.id})}" onclick="return confirm('정말 삭제할까요?')">삭제</a></td>
     </tr>
 </table>
+
+<div style="display: flex; justify-content: center; margin-top: 20px;">
+    <div>
+        <a th:each="page : ${pageNumbers}"
+           th:href="@{${keyword != null ? '/user/search' : '/board/UserList'}(keyword=${keyword}, page=${page})}"
+           style="margin: 0 5px; text-decoration: none; font-size: 16px; color: blue;">
+            <button type="button" style="padding: 5px 10px;">
+                <span th:text="${page}"></span>
+            </button>
+        </a>
+    </div>
+</div>
+
 </body>
 </html>

@@ -126,18 +126,43 @@ public class BoardController {
     }
 
     @GetMapping("/board/UserList")
-    public String UserList(HttpSession session, Model model) {
+    public String UserList(@RequestParam(value = "page", required = false) Integer currentPage, Model model, HttpSession session) {
 
         String loggedInUser = (String) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             session.setAttribute("errorMessage", "회원가입을 해주세요.");
             return "redirect:/";
         }
-        model.addAttribute("loggedInUser", loggedInUser);
+        int pageSize = 10;
+        int totalUsersCount = boardService.getTotalUsersCount();
+        int totalPages = (int) Math.ceil((double) totalUsersCount / pageSize);
 
-        List<UserDTO1> UserList = boardService.getAllUsers();
-        model.addAttribute("userList", UserList);
+        if (currentPage == null || currentPage < 1) {
+            currentPage = 1;
+        }
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        List<UserDTO1> userList = boardService.getUsersByPage(currentPage, pageSize);
+        List<Integer> pageNumbers = boardService.getUsersNumbers(totalPages);
+
+        model.addAttribute("userList", userList);
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", pageNumbers);
 
         return "board/UserList";
     }
+
+    @GetMapping("/board/UserDelete/{id}")
+    public String UserDelete(@PathVariable Long id) {
+        boolean delete = boardService.deleteUsersById(id);
+        if (delete) {
+            return "redirect:/board/UserList";
+        } else {
+            return "삭제 오류 입니다";
+        }
+    }
+
 }
